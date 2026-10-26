@@ -1,28 +1,36 @@
-"use client";
-import { useState } from "react";
+'use client';
 
-export default function HomePage(){
-  const [counter, setCounter] = useState(0);
-  const [showPassword, setShowPassword] = useState(false);
+import { useState } from 'react';
+import BSButton from '../components/BSButton';
+
+export default function LoginPage(){
+  const [number, setNumber] = useState(0);
+  const [name, SetName] = useState('Laiba');
+  
+  const names = [ 'laiba', 'malaika', 'areeba', 'maryam', 'Tayyaba', 'Marsad', 'javeria' ];
+
+  function btnClick(n: number){
+    if(number < n){
+      setNumber(number + 1);
+    }
+    else{
+      setNumber(0);
+    }
+    SetName("Maryam");
+    // console.log(number)
+  }
 
   return (
-    <main className="p-8 bg-grey">
-      <h1 className="text-black">Count {counter}</h1>
-      <button onClick={() => {
-        setCounter(counter + 1);
-        console.log(counter);
-      }} className="text-black">Increase</button>
-      <button onClick={() => {
-        setCounter(counter - 1);
-        console.log(counter);
-      }} className="text-black">Decrease</button>
-      {/* showPassword ? "" : "" */}
-      <input type={showPassword ? 'text': 'password' } className="placeholder-red-300 border border-red-400" placeholder="laiba@example.com"></input>
-      <button className="bg-red-300 px-3 rounded" onClick={()=>{
-        // console.log('Password show')
-        setShowPassword(!showPassword);
-        console.log(showPassword);
-      }}>Eye</button>
+    <main className="bg-white-800">
+      <div>{ number }</div>
+      
+      {/* <p>{ names.map((newname) => {
+        return <div>{newname}</div>
+      }) }</p> */}
+
+      <p>{names[number]}</p>
+
+      <button onClick={() => btnClick(names.length - 1)} className="p-2 bg-red-800 text-white-800">Test</button>
     </main>
-  )
+  );
 }
