@@ -14,6 +14,7 @@ export default function(){
         <Link href="/professors">Go to Professors</Link>
         <Link href="/donors">Go to Donors</Link>
       </nav>
+      <BSButton label="login"></BSButton>
     </main>
   );
 }
