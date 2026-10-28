@@ -1,36 +1,43 @@
-'use client';
+"use client";
+import { useState } from "react";
 
-import { useState } from 'react';
-import BSButton from '../components/BSButton';
+export default function UserPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordfield, setPasswordfield] = useState(true);
+  const [allfield, setAllfield] = useState(false);
 
-export default function LoginPage(){
-  const [number, setNumber] = useState(0);
-  const [name, SetName] = useState('Laiba');
-  
-  const names = [ 'laiba', 'malaika', 'areeba', 'maryam', 'Tayyaba', 'Marsad', 'javeria' ];
-
-  function btnClick(n: number){
-    if(number < n){
-      setNumber(number + 1);
-    }
-    else{
-      setNumber(0);
-    }
-    SetName("Maryam");
-    // console.log(number)
+  function changePassword(e: any) {
+    const value = e.target.value;
+    setPassword(value);
+    setPasswordfield(value.length > 8);
   }
 
   return (
-    <main className="bg-white-800">
-      <div>{ number }</div>
-      
-      {/* <p>{ names.map((newname) => {
-        return <div>{newname}</div>
-      }) }</p> */}
+    <main>
+      <input
+        type="text"
+        className="rounded border p-3 text-blue-300"
+        value={email}
+        onChange={(event) => {
+          setEmail(event.target.value);
+        }}
+      />
 
-      <p>{names[number]}</p>
+      <input
+        type="password"
+        className="rounded border p-3 text-blue-300"
+        value={password}
+        onChange={(event) => changePassword(event)}
+      />
 
-      <button onClick={() => btnClick(names.length - 1)} className="p-2 bg-red-800 text-white-800">Test</button>
+      <div className="">
+        {allfield ? (
+          <p className="text-red-500">Both Fields are required</p>
+        ) : (
+          <s className="text-green-500">Both Fields are required</s>
+        )}
+      </div>
     </main>
   );
 }
