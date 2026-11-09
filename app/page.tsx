@@ -1,110 +1,75 @@
 'use client';
-import { useState, useEffect, useRef } from "react";
+
 import Link from "next/link";
-import CustomButton from "./components/CustomButton";
+import { useState } from "react";
 
-export default function () {
-  const [fullname, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [counter, setCounter] = useState(0);
-  const [students, setStudents] = useState([
-    "Ayesha", "Maryam", "Tayyaba", "Laiba"
+type Student = {
+  id: number,
+  name: string,
+  semster: number,
+}
+
+export default function homepage(){
+  const [students, setStudents] = useState<Student[]>([
+    {
+      id: 1, name: "Ayesha", semster: 7
+    },
+    {
+      id: 2, name: "Laiba", semster: 7
+    },
+    {
+      id: 3, name: "Tayyaba", semster: 7
+    },
   ]);
-  const [aStudent, setAStudent] = useState('');
+  const [name, setName] = useState('');
+  const [search, setSearch] = useState('');
 
-  const validName = fullname.trim().length >= 3;
-  const validPassword =
-    /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const addStudent = () => {
+    if(!name.trim()) return;
 
-  const nameRef = useRef<HTMLInputElement>(null);
+    setStudents((previous) => [
+      ...previous,
+      {
+        id: Date.now(),
+        name: name.trim(),
+        semster: 1,
+      }
+    ]);
+  }
 
-  useEffect(() => {
-    nameRef.current?.focus();
-  }, []);
+  const deleteStudent = (id: number) => {
+    setStudents((previous) =>
+    previous.filter((student) => student.id !== id))
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    alert(`Name: ${fullname} Email: ${email}`);
-  };
+  }
 
-  const addToArray = () => {
-    if (aStudent.trim() === "") {
-      alert("Please write something");
-      return;
-    }
-    setStudents([...students, aStudent]);
-    setAStudent('');
-  };
+  const filteredStudents = students.filter((student) =>
+    student.name.toLowerCase().includes(search.toLowerCase())
+  );
 
-  const removeArray = (n: number) => {
-    setStudents((previous) => previous.filter((student, i) => i !== n));
-  };
-
-  return (
-    <main className="flex min-h-screen bg-gradient-to-br from-indigo-700 to-purple-800 items-center justify-center p-4 gap-4">
-
-      {/* LEFT WALA CARD */}
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl sm:p-8">
-        <input
-          type="text"
-          value={aStudent}
-          className="border border-gray-800 text-gray-800 rounded"
-          onChange={(e) => setAStudent(e.target.value)}
-        />
-        <button onClick={addToArray} className="bg-gray-800 text-white px-3 mb-3">Add</button>
-        {
-          students.map((student, index) => {
-            return (
-              <div key={index} className="flex gap-2">
-                <p className="text-gray-900">{student}</p>
-                <button onClick={() => removeArray(index)} className="bg-gray-800 text-white px-2">X</button>
-              </div>
-            );
-          })
-        }
+  return(
+    <main className="max-w-2xl bg-white mx-auto p-8">
+      <h1 className="text-3xl font-bold text-gray-800">Student Management</h1>
+      <div className="flex gap-4 mb-4">
+        <input type="text" onChange={(e) => setName(e.target.value)} className="border p-2 flex-1 text-gray-800" placeholder="Add Students" />
+        <button className="bg-blue-600 text-white px-4" onClick={addStudent}>Add</button>
       </div>
 
-      {/* RIGHT WALA CARD - SIR WALA */}
-      <form onSubmit={handleSubmit} className="grid w-full max-w-md gap-4 rounded-2xl bg-white p-6 shadow-xl sm:p-8">
-        <h1 className="text-center text-2xl font-bold">Create Account</h1>
+      <div className="flex">
+        <input type="text" onChange={(e) => setSearch(e.target.value)} className="border p-2 mb-5 flex-1 text-gray-800" placeholder="Search Students" />
+      </div>
 
-        <label>Full Name</label>
-        <input
-          ref={nameRef}
-          type="text"
-          value={fullname}
-          placeholder="Full Name"
-          onChange={(e) => setFullName(e.target.value)}
-          className="border border-gray-800 text-gray-800 rounded p-3"
-        />
-        {!validName && <p className="text-red-500 text-sm">Name must be Three Characters</p>}
-
-        <label>Email</label>
-        <input
-          type="email"
-          value={email}
-          placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
-          className="border border-gray-800 text-gray-800 rounded p-3"
-        />
-        {!validPassword && <p className="text-red-500 text-sm">Name must be 8 Characters</p>}
-
-        <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-          className="border border-gray-800 text-gray-800 rounded p-3"
-        />
-
-        <CustomButton />
-        <button type="submit" className="bg-gray-800 text-white p-3 rounded-full">Register</button>
-        <Link href="/dashboard">Go to Dashboard</Link>
-      </form>
-
+      {
+        filteredStudents.map((student, index) => {
+          return <div className="flex gap-2 mb-2 justify-between" key={student.id}>
+            <Link className="font-bold text-blue-800" href={`/students/${student.id}`}>
+              Show Students
+            </Link>
+            <p className="text-xl text-gray-700">{student.name}</p>
+            <button className="bg-red-600 text-white px-4" onClick={() => deleteStudent(student.id)}>Remove</button>
+          </div>;
+        })
+      }
     </main>
-  );
+  )
 }
