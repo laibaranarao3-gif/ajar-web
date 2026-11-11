@@ -12,19 +12,14 @@ type Student = {
 
 export default function homepage(){
   const [students, setStudents] = useState<Student[]>([
-    {
-      id: 1, name: "Ayesha", semster: 7
-    },
-    {
-      id: 2, name: "Laiba", semster: 7
-    },
-    {
-      id: 3, name: "Tayyaba", semster: 7
-    },
+    { id: 1, name: "Ayesha", semster: 7 },
+    { id: 2, name: "Laiba", semster: 7 },
+    { id: 3, name: "Tayyaba", semster: 7 },
   ]);
 
   const [name, setName] = useState("");
   const [search, setSearch] = useState("");
+  const router = useRouter();
 
   const addStudent = () => {
     if (name.trim() === "") return;
@@ -43,15 +38,13 @@ export default function homepage(){
     );
   }
 
-  const filteredStudents = students.filter((student) =>
-    student.name.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const router = useRouter();
-
   const redirectToDashboard = () => {
     router.push('/dashboard');
   }
+
+  const filteredStudents = students.filter((student) =>
+    student.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return(
     <main className="max-w-2xl bg-white mx-auto p-8">
@@ -68,6 +61,9 @@ export default function homepage(){
         <button className="bg-blue-600 text-white px-4" onClick={addStudent}>
           Add
         </button>
+        <button className="bg-blue-600 text-white px-4" onClick={redirectToDashboard}>
+          Redirect
+        </button>
       </div>
 
       <div className="flex gap-4 mb-4">
@@ -79,24 +75,20 @@ export default function homepage(){
         />
       </div>
 
-      <div className="flex gap-4 mb-4">
-        <button className="bg-green-600 text-white px-4 py-2" onClick={redirectToDashboard}>
-          Dashboard
-        </button>
-      </div>
-
       {filteredStudents.map((student) => (
-        <div key={student.id} className="flex justify-between items-center borderz p-2 mb-2 text-gray-800">
-          <span>{student.name} - Semester {student.semster}</span>
+        <div key={student.id} className="flex gap-2 mb-2 justify-between items-center p-2">
+          <Link className="font-bold text-blue-800" href={`/students/${student.id}`}>
+            Show Students
+          </Link>
+          <p className="text-gray-700">{student.name}</p>
           <button
             onClick={() => deleteStudent(student.id)}
-            className="bg-red-500 text-white px-3 py-1"
+            className="bg-red-600 text-white px-4 py-1"
           >
-            Delete
+            Remove
           </button>
         </div>
       ))}
-
     </main>
   )
 }

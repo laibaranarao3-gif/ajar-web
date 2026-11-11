@@ -1,11 +1,19 @@
-'use client';
-import { useState } from "react";
+import Link from "next/link";
 
-export default function AdminDashboard(){
+export default function DashboardPage() {
+  const professors = ["Laiba", "Malaika", "Tayyaba", "Areeba"];
+
   return (
     <main>
-      <h1 className="text-3xl font-bold text-indigo-800">Admin Dashboard</h1>
-      <p className="mt-3 text-gray-200">Welcome Admin Screen</p>
+      <h1>Admin Panel</h1>
+      <h1>Admin Dashboard</h1>
+      <p>Welcome Admin</p>
+
+      {professors.map((prof) => (
+        <Link key={prof} href={`/professor/${prof}`}>
+          <p>Go To professor {prof}</p>
+        </Link>
+      ))}
     </main>
   );
 }
