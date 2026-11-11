@@ -25,7 +25,6 @@ export default function homepage(){
 
   const [name, setName] = useState("");
   const [search, setSearch] = useState("");
-  const [email, setEmail] = useState("");
 
   const addStudent = () => {
     if (name.trim() === "") return;
@@ -51,9 +50,7 @@ export default function homepage(){
   const router = useRouter();
 
   const redirectToDashboard = () => {
-    if (email == 'avd') {
-      router.push('/dashboard');
-    }
+    router.push('/dashboard');
   }
 
   return(
@@ -83,19 +80,13 @@ export default function homepage(){
       </div>
 
       <div className="flex gap-4 mb-4">
-        <input
-          type="text"
-          onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 flex-1 text-gray-800"
-          placeholder="Enter Email"
-        />
-        <button className="bg-green-600 text-white px-4" onClick={redirectToDashboard}>
+        <button className="bg-green-600 text-white px-4 py-2" onClick={redirectToDashboard}>
           Dashboard
         </button>
       </div>
 
       {filteredStudents.map((student) => (
-        <div key={student.id} className="flex justify-between items-center border p-2 mb-2 text-gray-800">
+        <div key={student.id} className="flex justify-between items-center borderz p-2 mb-2 text-gray-800">
           <span>{student.name} - Semester {student.semster}</span>
           <button
             onClick={() => deleteStudent(student.id)}
@@ -105,10 +96,6 @@ export default function homepage(){
           </button>
         </div>
       ))}
-
-      <Link href="/dashboard" className="text-blue-600 underline">
-        Go to Dashboard
-      </Link>
 
     </main>
   )
